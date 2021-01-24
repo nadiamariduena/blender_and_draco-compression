@@ -368,5 +368,36 @@ Total: 41.537ms
 
 [<img src="./src/images/quantisiz5.jpg"/>]()
 
+
 <br>
+<br>
+<hr>
+<br>
+<br>
+
+
+## GOOD NEWS 🍦 🍦 🍦
+
+#### I FOUND a way to add smooth without using Subdivision, and its " Shade Smooth" inside of the Object
+
+<br>
+
+- So **WHAT IS** THIS **"Shade Smooth"**?
+<br>
+
+- Its just a soft way to add smooth **without using a Modifier** which makes our models really high res, smooth is like air.
+
+[<img src="./src/images/bird_smooth_inside_object.jpg"/>]()
+
+#### Result of  **"Shade Smooth"**
+
+- I Dont like the extrem quadratisch of the beak, yes it s 64,1kb WONDERFUL !! but it s ugly 🔴
+
+```javascript
+// birdblleu_ohnesubdivision_and_compression_with_shadesmooth.glb
+ 64,1Kb  // (extrem quadratic)
+```
+
+[<img src="./src/images/bird-smooth-shading_and-compression-No_modifier.gif"/>]()
+
 <br>
