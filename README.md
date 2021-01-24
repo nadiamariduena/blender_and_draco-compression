@@ -436,7 +436,9 @@ Total: 41.537ms
 
 ### Here I added smooth Modifier + Smooth Shading to a Join Model
 
-- I said to a "join" Model, because I tried to add a strong smooth to the beak like the Smooth Modifier and then when join to the rest of the body , apply the smooth shading \*\*It didnt work" as somehow the whole thing get distorted.
+- I said to a "join" Model, because I tried to add a strong smooth to the beak like the Smooth Modifier and then when join to the rest of the body , apply the smooth shading  **It didnt work** as somehow the whole thing get distorted.
+
+- WHEN I SAID "join" i make reference to "MERGE" , take the gerometries  and join them to one.
 
 #### As you can see, its a mess
 
@@ -454,3 +456,24 @@ Total: 41.537ms
 
 <br>
 <br>
+
+- **ANOTHER option would be to add a GUI panel**, with an option to make it smooth on the screen, this can be a choice that will give the user the possibility to add as much as smooth as they want.
+
+<br>
+<br>
+
+## More Options 🌵
+
+#### GUI Panel example
+
+- The Gui Panel is the box with the blue bars, that let you manipulate the model.
+
+[<img src="./src/images/GuiPanel-example.png"/>]()
+
+#### ANOTHER EXAMPLE
+
+- Here you can see how i can manipulate the vertices of someone else models
+
+##### TRY IT
+
+[<img src="./src/images/guipanel_example_onpage.gif"/>](https://threejs.org/examples/?q=subd#webgl_modifier_subdivision)
