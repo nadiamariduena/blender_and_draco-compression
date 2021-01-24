@@ -401,3 +401,56 @@ Total: 41.537ms
 [<img src="./src/images/bird-smooth-shading_and-compression-No_modifier.gif"/>]()
 
 <br>
+<br>
+
+### Smooth Options
+
+#### Smooth Modifier 🍦
+
+> The **Smooth modifier** smooths a mesh by **flattening the angles between adjacent faces in it**, just like the Smooth tool in Edit Mode. It smooths without subdividing the mesh, the number of vertices remains the same.
+
+- This modifier is not limited to smoothing, though. Its control factor can be configured outside the (0.0 to 1.0) range (including negative values), which can result in interesting deformations.
+
+[<img src="./src/images/modeling_modifiers_deform_smooth_panel.png"/>]()
+
+[docs/Blender: Smooth Modifier](https://docs.blender.org/manual/en/latest/modeling/modifiers/deform/smooth.html)
+
+<br>
+
+### Result 🔴
+
+- The result of the **smooth Modifier** is good, but since its a Modifier it will of course add it to the size of the model, so here we have **192,5 Kb**
+
+```javascript
+//birdblleu_smoothModifier_Withcompression_modifer.glb
+ 192,5Kb  // (a bit quadratic)
+```
+
+[<img src="./src/images/smooth-modifier_withCompression_result.gif"/>]()
+
+<br>
+
+- Its a Bit quadratisch but **its not that bad**, of course **my goal is to have the models as smooth as possible**, but until i find a way to reduce the size of the model, its okay.
+
+- SO what i am going to do, is to add a modifier to the beak/bec and then add a simple **smooth shading** to the rest of the body.
+
+### Here I added smooth Modifier + Smooth Shading to a Join Model
+
+- I said to a "join" Model, because I tried to add a strong smooth to the beak like the Smooth Modifier and then when join to the rest of the body , apply the smooth shading \*\*It didnt work" as somehow the whole thing get distorted.
+
+#### As you can see, its a mess
+
+[<img src="./src/images/smooth-modifier_and_smooth-shading_TESTS.gif"/>]()
+
+#### So this is what worked
+
+- I added a Smooth Modifier ( 1622 FACTOR AND 2 of REPEAT )then i added a smooth shading to the whole "join" model, isn't perfect but can work...
+
+<br>
+
+- And as you can see in the image, it makes a total of **63,9Kb**
+
+[<img src="./src/images/smooth-modifier_and_smooth-shading.jpg"/>]()
+
+<br>
+<br>
