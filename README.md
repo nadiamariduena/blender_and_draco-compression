@@ -295,5 +295,78 @@ Total: 61.186ms
 };
 ```
 
+ 
+
+<br>
+<br>
+<hr>
+<br>
+<br>
+
+# 🌵
+
+## AFTER DEFAULT BLENDER COMPRESSION
+
+- I decided to give a last try to the gltf-pipeline compression
+
+#### USING -d7
+
+```javascript
+//
+ /nm-draco-obj-compressor/public/models$
+ gltf-pipeline -i bird_compres_modi_notangetnts.glb -o bird_compres_modi_notangetntsDraco.gltf -d7
+//
+Total: 61.186ms
+```
+
+#### USING -d10
+
+```javascript
+/nm-draco-obj-compressor/public/models$ gltf-pipeline -i bird_compres_modi_notangetnts.glb -o bird_compres_modi_notangetntsDraco2.gltf -d10
+Total: 41.537ms
+```
+
+[<img src="./src/images/draco_and_Pipeline-results.jpg"/>]()
+
+<br>
+<br>
+
+## 🌵
+
+# AFTER THE PIPELINE TESTS
+
+##### I DECIDED TO MANIPULATE THE SUBDIVISION Modifier to see if there was a possibilty to recude the size, and yes in fact "there was a way"
+
+## what i've learned so far 🐖
+
+<br>
+
+- **NEVER ADD SUBDIVISION as it (makes it smooth by adding more vertices which is bad in our case) to each part of a model** (yes its cool) BUT ITS painful when using it in a scene due to the cpu/gpu, I am still trying to figure that out.
+
+[CPU vs GPU (What's the Difference?) - Computerphile](https://www.youtube.com/watch?v=_cyVDoyI6NE)
+
+<br>
+<br>
+
+##### SO JUST APPLY 1 subdivision to the whole model and thats all!
+
+- AlSO VERY IMPORTANT don't change this inside the (circle), if you dont know what you are doing:
+
+[<img src="./src/images/compression_fields.jpg"/>]()
+
+> 6 14 10 12 12 (**Blender Default**)
+
+<br>
+
+#### I DONT KNOW WHAT I AM DOING, but i am curious 💃
+
+- **LOOK AT** the picture above and then read the following:
+
+> 14 is good as if you use less than that, it will be the opposite of smooth, it will look very quadratic, of course it will pass from 658,8kb (14 quantize), to 401,4 kb (5 quantize)
+
+#### result of changing to (5 quantize)
+
+[<img src="./src/images/quantisiz5.jpg"/>]()
+
 <br>
 <br>
