@@ -10,16 +10,236 @@
 
  <br>
  <hr>
+<br>
+
+# 🌵
+
+## SOLUTION FOR MY Draco PATH issue ../
+
+#### I Had a hard time figuring out how to import draco to my scene, yes in three js there is a Boiler plate but they dont tell how to import it in "REACT".
+
+- I WAS SO LUCKY to find this blog:
+
+[Draco compression and Three.js](https://blog.jsbe.fun/2020/10/draco-compression-and-threejs.html)
+
+Blog by:
+
+#### Łukasz Lityński
+
+ <br>
+
+#### I copied and pasted the steps from the blog (just in case someone deleted it)
+
+ <br>
+
+- Let's [go into Three.js docs.](https://threejs.org/docs/#examples/en/loaders/DRACOLoader) They say that we can convert our normal GLTF files into Draco compressed GLTF files. In order to that we'd need to use something called [glTF-Pipeline.](https://github.com/CesiumGS/gltf-pipeline)
+
+<br>
+
+- So let's do this. First we need some GLTF. Then we install glTF-Pipeline.
+
+#### Install glTF-Pipeline
+
+```javascript
+npm install --save-dev gltf-pipeline
+```
+
+#### Compress files
+
+```javascript
+npx gltf-pipeline -i scene.gltf -o compressed-scene.gltf -d
+```
+
+<br>
+
+**Unfortunately this compression doesn't always shrink asset size**. Not sure if it depends on configuration or specific assets to compress but models with big textures are not getting smaller with Draco :( But AFAIK Draco is for compressing geometries rather than textures.
+
+> But let's assume optimistic path that our asset did shrink. So let's go to the next path. Let's load an asset as usual, using GLTFLoader:
+
+```javascript
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
+// ...
+
+const loader = new GLTFLoader();
+
+loader.load(
+  "PATH_TO_OUR_GLTF",
+  (d) => {
+    scene.add(d.scene);
+  },
+  null,
+  (e) => {
+    console.error(e);
+  }
+);
+```
+
+<br>
+
+#### And let's run.
+
+##### result
+
+```javascript
+Error: THREE.GLTFLoader: No DRACOLoader instance provided.
+    at new GLTFDracoMeshCompressionExtension (GLTFLoader.js:563)
+    at GLTFLoader.parse (GLTFLoader.js:190)
+    at Object.eval [as onLoad] (GLTFLoader.js:87)
+    at XMLHttpRequest.eval (three.module.js:36838)
+```
+
+<br>
+
+##### Yupi! We're almost at home. This error means that Three.js recognized that given GLTF is Draco compressed but we need to create DRACOLoader object and pass it to the GLTFLoader:
+
+```javascript
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+
+// ...
+
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+loader.setDRACOLoader(dracoLoader);
+
+loader.load(
+  "PATH_TO_OUR_GLTF",
+  (d) => {
+    scene.add(d.scene);
+  },
+  null,
+  (e) => {
+    console.error(e);
+  }
+);
+```
+
+<br>
+
+#### Yet we missed something:
+
+```javascript
+GET http://localhost:8080/assets/create.svg 404 (Not Found)
+three.module.js:36920 GET http://localhost:8080/draco_wasm_wrapper.js 404 (Not Found)
+three.module.js:36920 GET http://localhost:8080/draco_decoder.wasm 404 (Not Found)
+localhost/:1 Uncaught (in promise) ProgressEvent {isTrusted: true, lengthComputable: true, loaded: 160, total: 160, type: "load", …}
+localhost/:1 Uncaught (in promise) ProgressEvent {isTrusted: true, lengthComputable: true, loaded: 160, total: 160, type: "load", …}
+localhost/:1 Uncaught (in promise) ProgressEvent {isTrusted: true, lengthComputable: true, loaded: 160, total: 160, type: "load", …}
+```
+
+<br>
+
+# ☁️ ☁️ ☁️ ☁️
+
+#### And here's the weird part: it seems that you must to manually copy files from:
+
+```javascript
+// node_modules/three/examples/js/libs/draco/gltf;
+```
+
+#### into your public path on server:
+
+- You can do this using the cp command native to Ubuntu, which is specifically **intended for copying files and directories from one location to another.**
+
+```javascript
+cp -r node_modules/three/examples/js/libs/draco/gltf HERE_YOUR_PUBLIC_PATH
+//
+// i added myDecoder
+// cp -r node_modules/three/examples/js/libs/draco/gltf public/myDecoder
+//  https://www.coderrocketfuel.com/article/copy-a-folder-to-a-new-location-via-the-terminal-on-ubuntu
+```
+<br>
+
+- At one point it gets slow (I am trying to remember the steps :)
+
+[<img src="./src/images/node_modules_three_examples_js_libs_draco_gltf_.gif"/>]()
+
+ 
+
+<br>
+
+##### AFTER typing that a folder containing the files is going to be created
+
+- It should look like this:
+
+[<img src="./src/images/decod.jpg"/>]()
+
+<br>
+
+#### Then you have to call
+
+```javascript
+dracoLoader.setDecoderPath("PATH_TO_DRACO_LIBRARY");
+```
+
+##### So our final code:
+
+```javascript
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+
+// ...
+
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath("PATH_TO_DRACO_LIBS_ON_SERVER");
+loader.setDRACOLoader(dracoLoader);
+loader.load(
+  "PATH_TO_OUR_GLTF",
+  (d) => {
+    scene.add(d.scene);
+  },
+  null,
+  (e) => {
+    console.error(e);
+  }
+);
+```
+
+<br>
+<br>
+
+##### MY CODE
+
+```javascript
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+//
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath("myDecoder/");
+loader.setDRACOLoader(dracoLoader);
+//
+//
+loader.load(
+  "./models/beanstalk2_green-processed.gltf",
+  (d) => {
+    this.scene.add(d.scene);
+  },
+  null,
+  (e) => {
+    console.error(e);
+  }
+);
+//
+```
+
+<br>
+<br>
+<br>
+<hr>
+<br>
 
 # 🐖
 
-##  OBJ or PLY files
+## OBJ or PLY files
 
 - ONCE YOU ARE DONE With the Draco and Cmake installation
 
 - **Modify the first file** 🍦
 
-> draco_encoder 
+> draco_encoder
 
 - Will read **OBJ or PLY** files as input, and output Draco-encoded files **".drc"**
 
@@ -75,8 +295,6 @@ For better compression, increase the compression level up to '-cl 10' .
 <hr>
 <br>
 <br>
-
-
 
 # 🍦 🍦 🍦
 
@@ -295,8 +513,6 @@ Total: 61.186ms
 };
 ```
 
- 
-
 <br>
 <br>
 <hr>
@@ -368,13 +584,11 @@ Total: 41.537ms
 
 [<img src="./src/images/quantisiz5.jpg"/>]()
 
-
 <br>
 <br>
 <hr>
 <br>
 <br>
-
 
 ## GOOD NEWS 🍦 🍦 🍦
 
@@ -383,13 +597,13 @@ Total: 41.537ms
 <br>
 
 - So **WHAT IS** THIS **"Shade Smooth"**?
-<br>
+  <br>
 
 - Its just a soft way to add smooth **without using a Modifier** which makes our models really high res, smooth is like air.
 
 [<img src="./src/images/bird_smooth_inside_object.jpg"/>]()
 
-#### Result of  **"Shade Smooth"**
+#### Result of **"Shade Smooth"**
 
 - I Dont like the extrem quadratisch of the beak, yes it s 64,1kb WONDERFUL !! but it s ugly 🔴
 
@@ -436,9 +650,9 @@ Total: 41.537ms
 
 ### Here I added smooth Modifier + Smooth Shading to a Join Model
 
-- I said to a "join" Model, because I tried to add a strong smooth to the beak like the Smooth Modifier and then when join to the rest of the body , apply the smooth shading  **It didnt work** as somehow the whole thing get distorted.
+- I said to a "join" Model, because I tried to add a strong smooth to the beak like the Smooth Modifier and then when join to the rest of the body , apply the smooth shading **It didnt work** as somehow the whole thing get distorted.
 
-- WHEN I SAID "join" i make reference to "MERGE" , take the gerometries  and join them to one.
+- WHEN I SAID "join" i make reference to "MERGE" , take the gerometries and join them to one.
 
 #### As you can see, its a mess
 
@@ -453,6 +667,58 @@ Total: 41.537ms
 - And as you can see in the image, it makes a total of **63,9Kb**
 
 [<img src="./src/images/smooth-modifier_and_smooth-shading.jpg"/>]()
+
+<br>
+<br>
+
+```javascript
+import * as THREE from "three";
+//
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+//
+//----------------------------------
+//         BLENDER  MODELS
+//----------------------------------
+//
+
+//---------------------------
+//
+// ******** test ***** modifiers
+
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath("myDecoder/");
+loader.setDRACOLoader(dracoLoader);
+
+// COMPRESSED
+//
+// 63,9 Kb
+
+loader.load(
+  "./models/bird-bleu/bird_with_smoothShading_and_with_smooth-modifier-and_with_compression_default.glb",
+  (gltf) => {
+    this.meshy = gltf.scene;
+
+    gltf.scene.traverse((model) => {
+      if (model.material) model.material.metalness = 0.08;
+
+      model.receiveShadow = true;
+      model.scale.set(0.5, 0.5, 0.5);
+      // model.rotation.y = 1;
+
+      //
+      model.position.x = 2;
+      model.position.y = 3;
+      model.position.z = 6;
+    });
+
+    this.scene.add(gltf.scene);
+  }
+);
+```
 
 <br>
 <br>
