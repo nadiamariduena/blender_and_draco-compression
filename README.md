@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+## DRACO AND CMAKE
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### Continuation
 
-## Available Scripts
+[Compressing 3D Model Files with Draco](https://spin.atomicobject.com/2018/09/30/compress-3d-files-draco/)
 
-In the project directory, you can run:
+###### MY REPO in (HOW TO INSTALL DRACO / CMAKE)
 
-### `npm start`
+[INSTALLING CMAKE](https://github.com/nadiamariduena/nm-final-three-scene)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+ <br>
+ <hr>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# 🐖
 
-### `npm test`
+##  OBJ or PLY files
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- ONCE YOU ARE DONE With the Draco and Cmake installation
 
-### `npm run build`
+- **Modify the first file** 🍦
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> draco_encoder 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Will read **OBJ or PLY** files as input, and output Draco-encoded files **".drc"**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<br>
 
-### `npm run eject`
+- GO TO **BLENDER** and create a geometry (a cube etc) **save it in a .ply format** inside the **draco-test folder**. (draco test is the name i choose while creating it)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<br>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Open your terminal** (inside the folder the "draco test folder" is, this is not the respository draco folder you downloaded from github)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<br>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Here you will **convert a .ply file format to a drc. format**
 
-## Learn More
+```javascript
+~/Documents/draco-test$ ./draco_encoder -i sphere.ply -o sphere.drc
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<br>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### result 🔴
 
-### Code Splitting
+```javascript
+Encoder options:
+  Compression level = 7
+  Positions: Quantization = 11 bits
+  Normals: Quantization = 8 bits
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Encoded mesh saved to sphere.drc (1 ms to encode).
 
-### Analyzing the Bundle Size
+Encoded size = 2625 bytes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+For better compression, increase the compression level up to '-cl 10' .
+/// OPTIONS TO CHANGE THE SIZE OF THE FORMAT
+// include -cl 10 in between the line
+./draco_encoder -i sphere.ply -cl 10 -o sphere_1newcompress.drc
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
 
-### Advanced Configuration
+#### OPTIONS TO CHANGE THE SIZE OF THE FORMAT
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- include -cl 10 in between the line
 
-### Deployment
+```javascript
+./draco_encoder -i sphere.ply -cl 10 -o sphere_1newcompress.drc
+// ./draco_decoder -i in.drc -o out.obj
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<br>
+<br>
